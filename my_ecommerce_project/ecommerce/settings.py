@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-!2_-p!8@rmw-)p!yxu=b5+kg=vv#6_e$5c-mu7^1d)^j%29)4y
 DEBUG = True
 
 ALLOWED_HOSTS = ['my-ecommerce-project-wvst.onrender.com''localhost', '127.0.0.1']
+DEBUG = False
 
 
 # Application definition
