@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+    <h2 class="text-center fw-bold mb-4">Our Featured Products</h2>
+
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <form method="GET" action="{% url 'store:product_list' %}" class="d-flex">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search products...">
+                <button class="btn btn-warning" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top product-img" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/200" class="card-img-top product-img" alt="No Image">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5>{{ product.name }}</h5>
+                        <p>{{ product.price }}</p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'store:product_detail' product.id %}" class="btn btn-primary">View Details</a>
+                             <a href="{% url 'store:add_to_wishlist' product.id %}" class="btn btn-warning">Add to Wishlist</a>
+                            <a href="{% url 'store:add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">No products found.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

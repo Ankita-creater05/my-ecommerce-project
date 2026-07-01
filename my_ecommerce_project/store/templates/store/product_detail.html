@@ -1,0 +1,54 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:300px;">
+    {% endif %}
+
+    <p><strong>Description:</strong> {{ product.description }}</p>
+    <p><strong>Price:</strong> ₹{{ product.price }}</p>
+
+    <div class="d-grid gap-2 d-md-block mt-3">
+    <a href="{% url 'store:add_to_cart' product.id %}" class="btn btn-success">Add to Cart</a>
+    <a href="#" class="btn btn-primary">Buy Now</a>
+
+    <hr>
+<h5>Write a Review</h5>
+<form method="POST" action="{% url 'store:add_review' product.id %}">
+    {% csrf_token %}
+    <select name="rating" class="form-control">
+        <option value="5">5 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="2">2 Stars</option>
+        <option value="1">1 Star</option>
+    </select>
+    <textarea name="comment" class="form-control mt-2" placeholder="Your review..."></textarea>
+    <button type="submit" class="btn btn-warning mt-2">Submit Review</button>
+</form>
+<hr>
+<h5>Customer Reviews</h5>
+
+{% for review in reviews %}
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <h6 class="card-title fw-bold">{{ review.user.username }}</h6>
+            <p class="text-warning mb-1">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </p>
+            <p class="card-text">{{ review.comment }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p>No reviews yet.</p>
+{% endfor %}
+</div>
+
+
+    
+    <br>
+{% endblock %}
