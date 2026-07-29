@@ -1,17 +1,32 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from .models import Product, CartItem, Wishlist, Review 
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
+
 
 def login_view(request):
-    return render(request, 'store/login.html')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('store:product_list')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'store/login.html', {'form': form})
+
+def logout_views(request):
+    logout(request)
+    return redirect('store:product_list')
 
 def product_list(request):
     query = request.GET.get('q')
     products = Product.objects.all()
     if query:
-        pass 
+        products = products.filter(name__icontains=query)
     return render(request, 'store/index.html', {'products': products})
 
 def product_detail(request, pk):
@@ -19,23 +34,22 @@ def product_detail(request, pk):
     return render(request, 'store/product_detail.html', {'product': product})
 
 
-@login_required
+@login_required(login_url='store:login')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+    cart = request.session.get('cart', [])
     
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    
-    return redirect('product_list')
+    if product.id not in cart:
+        cart.append(product.id)
+        request.session['cart'] = cart
+    return redirect('store:cart')
 
-@login_required
 def add_to_wishlist(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
-    
-    return redirect('product_list') 
+    wishlist = request.session.get('wishlist', [])
+    if product_id not in wishlist:
+        wishlist.append(product_id)
+        request.session['wishlist'] = wishlist
+    return redirect('store:product_list') 
 
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product, Review
@@ -63,7 +77,26 @@ def product_detail(request, product_id):
     })
 
 def cart_view(request):
-    return render(request, 'store/cart.html')
+    cart_ids = request.session.get('cart', [])
+    products = Product.objects.filter(id__in=cart_ids)
+    return render(request, 'store/cart.html', {'products': products})
 
 def wishlist_view(request):
-    return render(request, 'store/wishlist.html')
+    wishlist_ids = request.session.get('wishlist', [])
+    products = Product.objects.filter(id__in=wishlist_ids)
+    return render(request, 'store/wishlist.html', {'products': products})
+
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', [])
+    
+    if product_id in cart:
+        cart.remove(product_id)
+        request.session['cart'] = cart
+        
+    return redirect('store:cart')
+def remove_from_wishlist(request, product_id):
+    wishlist = request.session.get('wishlist', [])
+    if product_id in wishlist:
+        wishlist.remove(product_id)
+        request.session['wishlist'] = wishlist
+    return redirect('store:wishlist')

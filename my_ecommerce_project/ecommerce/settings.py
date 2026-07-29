@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!2_-p!8@rmw-)p!yxu=b5+kg=vv#6_e$5c-mu7^1d)^j%29)4y
 DEBUG = True
 
 ALLOWED_HOSTS = ['my-ecommerce-project-wvst.onrender.com''localhost', '127.0.0.1']
-DEBUG = False
+DEBUG = True
 
 
 # Application definition
@@ -67,7 +67,9 @@ TEMPLATES = [
         },
     },
 ]
-
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 
@@ -126,3 +128,8 @@ import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+STATIC_URL = 'static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

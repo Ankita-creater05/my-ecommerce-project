@@ -1,0 +1,62 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    
+    <!-- Stylish Blue-Themed Center Heading with Side Lines -->
+    <div class="text-center mb-5">
+        <div class="d-flex align-items-center justify-content-center">
+            <hr class="flex-grow-1 mx-3" style="border-top: 2px solid #93c5fd; opacity: 1;">
+            <h2 class="fw-bold mb-0 px-3 text-primary" style="letter-spacing: 0.5px;">My Shopping Cart</h2>
+            <hr class="flex-grow-1 mx-3" style="border-top: 2px solid #93c5fd; opacity: 1;">
+        </div>
+    </div>
+
+    <!-- Cart Table Section inside a Clean White Container -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="bg-white rounded-4 shadow-sm p-4 border" style="border-color: #bfdbfe !important;">
+                <table class="table align-middle mb-0">
+                    <thead style="background-color: #f8fafc;">
+                        <tr>
+                            <th class="py-3 text-primary fw-bold">Product</th>
+                            <th class="py-3 text-primary fw-bold">Price</th>
+                            <th class="py-3 text-primary fw-bold text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td class="py-3 fw-semibold text-dark">{{ product.name }}</td>
+                                <td class="py-3 text-secondary fw-bold">₹{{ product.price }}</td>
+                                <td class="py-3 text-end">
+                                    <a href="{% url 'store:remove_from_cart' product.id %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 text-decoration-none">Remove</a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="mb-3">
+                                        <i class="bi bi-cart-x text-primary" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h4 class="text-dark fw-bold mb-2">Your cart is currently empty.</h4>
+                                    <p class="text-muted small mb-4">Looks like you haven't added anything to your cart yet.</p>
+                                    <a href="{% url 'store:product_list' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold text-decoration-none shadow-sm">Continue Shopping</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if products %}
+                <div class="text-start mt-4">
+                    <a href="{% url 'store:product_list' %}" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold text-decoration-none shadow-sm">Continue Shopping</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
