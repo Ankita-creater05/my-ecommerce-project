@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +80,7 @@
         list-style: none;
         padding: 0;
     }
-</style>
+</style>s
 </head>
 <body>
 
@@ -105,13 +106,13 @@
             </div>
 
             <!-- Right Side: Brand Banner -->
-            <div class="col-md-6 brand-section d-none d-md-flex">
-                <div class="mb-3 p-3 bg-dark rounded-4 shadow-sm border border-secondary">
-                    <span class="fs-3 fw-bold text-info">DS</span>
-                </div>
-                <h4 class="fw-bold mt-2">Join DevShop Today</h4>
-                <p class="text-muted small mt-2" style="color: #9ca3af !important;">Equip your workspace with the best developer gear and accessories.</p>
-            </div>
+<div class="col-md-6 brand-section d-none d-md-flex">
+    <div class="mb-3">
+        <img src="{% static 'image/chip_logo.png' %}" alt="DevShop Logo" style="width: 180px; height: 180px; object-fit: contain;">
+    </div>
+    <h4 class="fw-bold mt-2">Join DevShop Today</h4>
+    <p class="text-muted small mt-2" style="color: #9ca3af !important;">Equip your workspace with the best developer gear and accessories.</p>
+</div>
         </div>
     </div>
 
