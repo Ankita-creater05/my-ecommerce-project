@@ -28,7 +28,21 @@
                     <tbody>
                         {% for product in products %}
                             <tr>
-                                <td class="py-3 fw-semibold text-dark">{{ product.name }}</td>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <!-- Product Image with Link -->
+                                        <a href="{% url 'store:product_detail' product.id %}">
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 50px; height: 50px; object-fit: contain; background: #f8fafc; border-radius: 8px; padding: 4px;">
+                                            {% endif %}
+                                        </a>
+                                        
+                                        <!-- Product Name with Link -->
+                                        <a href="{% url 'store:product_detail' product.id %}" class="text-decoration-none text-dark fw-semibold">
+                                            {{ product.name }}
+                                        </a>
+                                    </div>
+                                </td>
                                 <td class="py-3 text-secondary fw-bold">₹{{ product.price }}</td>
                                 <td class="py-3 text-end">
                                     <a href="{% url 'store:remove_from_cart' product.id %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 text-decoration-none">Remove</a>
