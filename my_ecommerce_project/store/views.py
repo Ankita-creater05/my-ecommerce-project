@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import Product, CartItem, Wishlist, Review 
 from django.db.models import Avg, Q
@@ -17,6 +19,18 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'store/login.html', {'form': form})
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}! You can now log in.')
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'store/signup.html', {'form': form})
 
 def logout_views(request):
     logout(request)
