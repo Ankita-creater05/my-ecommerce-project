@@ -6,3 +6,4 @@ asgiref
 sqlparse
 PyMySQL
 Pillow
+whitenoise
