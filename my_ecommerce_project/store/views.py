@@ -27,7 +27,7 @@ def signup_view(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}! You can now log in.')
-            return redirect('login')
+            return redirect('store:login')
     else:
         form = UserCreationForm()
     return render(request, 'store/signup.html', {'form': form})
